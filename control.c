@@ -93,6 +93,7 @@ int main(int argc, char * argv[]) {
     int fd = open("story.txt", O_RDWR);
     read(fd, &story, sizeof(char) * 1000);
     printf("story contents:\n%s\n",story);
+    printf ("\n");
   }
 
   else {
