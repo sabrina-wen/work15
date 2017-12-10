@@ -1,23 +1,47 @@
 #include "headers.h"
 
-union semun semVal;
+union semun initVal;
+struct sembuf ctlVal;
 
 
-//functions to control sem value; how many can still access
+//function to control sem value; how many can still access
 //===========================================================
 
-//SEMVAL = 0; occupied
-int enter() {
-  semVal.val--;
-  int check = semctl(sem_id, 0, SETVAL, semVal);
+//SEMVAL = 0 (occupied) ; SEMVAL = 1 (unoccupied)
+int gate( int action ) {
+  int sem_id = semget(SEMKEY, 0, 0);
+  ctlVal.sem_num = 0;
+  if (action) {
+    ctlVal.sem_op = 1; //leave
+  } else {
+    ctlVal.sem_op = -1; //enter
+  }
+  int check = semop(sem_id, &ctlVal, 1);
   return check;
 }
 
-//SEMVAL = 1; unoccupied
-int leave() {
-  semVal.val++;
-  int check = semctl(sem_id, 0, SETVAL, semVal);
-  return check;
+//functions to view and control shm value
+//===========================================================
+
+//get shm val
+int getshm() {
+  int mem_id = shmget(MEMKEY, 0, 0);
+  //attach it to a pointer; obtain info
+  int * shm_val = (int *) shmat(mem_id, 0, SHM_RDONLY);
+  int size = *shm_val;
+  //detach it 
+  shmdt(shm_val);
+  return size;
+}
+
+//set new shm val
+void setshm( int size ) {
+  int mem_id = shmget(MEMKEY, 0, 0);
+  //attach it to a pointer
+  int * shm_val = (int *) shmat(mem_id, 0, SHM_RDONLY);
+  *shm_val = size;
+  //detach it 
+  shmdt(shm_val);
 }
 
 
@@ -35,8 +59,8 @@ int main(int argc, char * argv[]) {
       printf("sempahore created: %d\n", sem_id);
 
       //setting sem value
-      semVal.val = 1;
-      semctl(sem_id, 0, SETVAL, semVal);
+      initVal.val = 1;
+      semctl(sem_id, 0, SETVAL, initVal);
 
       // creating shared mem
       int mem_id = shmget(MEMKEY, sizeof(int), IPC_CREAT | IPC_EXCL);
