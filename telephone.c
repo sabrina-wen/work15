@@ -7,14 +7,14 @@ union semun semVal;
 //===========================================================
 
 //SEMVAL = 0; occupied
-int enter(int action) {
+int enter() {
   semVal.val--;
   int check = semctl(sem_id, 0, SETVAL, semVal);
   return check;
 }
 
 //SEMVAL = 1; unoccupied
-int leave(int action) {
+int leave() {
   semVal.val++;
   int check = semctl(sem_id, 0, SETVAL, semVal);
   return check;
