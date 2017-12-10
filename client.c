@@ -55,7 +55,7 @@ int main(){
   int fd= open("story.txt", O_APPEND|O_RDWR);//writer can read,write, and add
 
   //struct sembuf sops;
-  int len;
+  int  len;
   char * story;
   char newline[256];
 
@@ -68,22 +68,21 @@ int main(){
 
   //sets the current position in open file-- backwards by length from the end.
   if (len) {
-    lseek(fd, len * -1, SEEK_END);
+    lseek(fd,len* -1, SEEK_END);
     read(fd, story, len);
     printf("%s\n", story);
   } else {
     printf("No last lines.\n");
   }
    
-
   //USER GETS TO WRITE
   printf("Would you like to add?:\n");
   fgets(newline,sizeof(newline),stdin);//gets user input
   printf("%d\n", sizeof(newline));
   lseek(fd, 0, SEEK_END);
-  write(fd, newline, sizeof(newline));
-  setshm(sizeof(newline));
-  close(fd);
+  write(fd, newline, strlen(newline));
+  // setshm(strlen(newline));
+  //close(fd);
   gate(LEAVE);
   return 0;
 }
