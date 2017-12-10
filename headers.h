@@ -20,4 +20,6 @@ union semun {
   struct seminfo  *__buf;  /* Buffer for IPC_INFO
 			      (Linux-specific) */
 };
+int gate( int action );
+
 

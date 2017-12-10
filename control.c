@@ -44,13 +44,10 @@ void setshm( int size ) {
   shmdt(shm_val);
 }
 
-
 //===========================================================
 
 int main(int argc, char * argv[]) {
   if (argc == 2 && strcmp(argv[1], "-c") == 0) {
-    //printf("hi\n");
-
     // creates semaphore, note the permissions
     int sem_id = semget(SEMKEY, 1, IPC_CREAT | IPC_EXCL | 0777);
     if (sem_id == -1) {
