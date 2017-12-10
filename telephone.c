@@ -1,5 +1,28 @@
 #include "headers.h"
 
+union semun semVal;
+
+
+//functions to control sem value; how many can still access
+//===========================================================
+
+//SEMVAL = 0; occupied
+int enter(int action) {
+  semVal.val--;
+  int check = semctl(sem_id, 0, SETVAL, semVal);
+  return check;
+}
+
+//SEMVAL = 1; unoccupied
+int leave(int action) {
+  semVal.val++;
+  int check = semctl(sem_id, 0, SETVAL, semVal);
+  return check;
+}
+
+
+//===========================================================
+
 int main(int argc, char * argv[]) {
   if (argc == 2 && strcmp(argv[1], "-c") == 0) {
     //printf("hi\n");
@@ -10,12 +33,10 @@ int main(int argc, char * argv[]) {
       printf("semaphore already exists\n");
     } else {
       printf("sempahore created: %d\n", sem_id);
-      /** semctl(sem_id, 0, SETVAL, atoi(argv[2]));
-      if ((semctl(sem_id, 0, GETVAL)) == -1) {
-        printf("Semctl error: %s\n", strerror(errno));
-      } else {
-        printf("value set: %d\n", semctl(sem_id, 0, GETVAL));
-	} **/
+
+      //setting sem value
+      semVal.val = 1;
+      semctl(sem_id, 0, SETVAL, semVal);
 
       // creating shared mem
       int mem_id = shmget(MEMKEY, sizeof(int), IPC_CREAT | IPC_EXCL);
@@ -58,3 +79,4 @@ int main(int argc, char * argv[]) {
   }
   return 0;
 }
+
