@@ -60,8 +60,9 @@ int main(int argc, char * argv[]) {
       semctl(sem_id, 0, SETVAL, initVal);
 
       // creating shared mem
-      int mem_id = shmget(MEMKEY, sizeof(int), IPC_CREAT | IPC_EXCL);
+      int mem_id = shmget(MEMKEY, sizeof(int), IPC_CREAT | IPC_EXCL | 0777);
       printf("mem id: %d\n", mem_id);
+      setshm(0);
 
       // create file
       int fd = open("story.txt", O_CREAT | O_RDWR | O_TRUNC, 0777);
