@@ -38,7 +38,7 @@ int getshm() {
 void setshm( int size ) {
   int mem_id = shmget(MEMKEY, 0, 0);
   //attach it to a pointer
-  int * shm_val = (int *) shmat(mem_id, 0, SHM_RDONLY);
+  int * shm_val = (int *) shmat(mem_id, 0, 0);
   *shm_val = size;
   //detach it 
   shmdt(shm_val);
