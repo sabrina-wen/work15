@@ -63,7 +63,7 @@ int main(){
   printf("Last lines: \n");
   len = getshm();
   printf("%d\n", len);
-  //  story = (char*) calloc(1,*length+1);
+  story = (char*) calloc(1,len+1);
 
 
   //sets the current position in open file-- backwards by length from the end.
@@ -81,8 +81,16 @@ int main(){
   printf("%d\n", sizeof(newline));
   lseek(fd, 0, SEEK_END);
   write(fd, newline, strlen(newline));
-  // setshm(strlen(newline));
+  setshm(strlen(newline));
+  len=getshm();
+  /* if (len) {
+    lseek(fd,len* -1, SEEK_END);
+    read(fd, story, len);
+    printf("%s\n", story);
+  } else {
+    printf("No last lines.\n");
+    }*/
   //close(fd);
-  gate(LEAVE);
+  // gate(LEAVE);
   return 0;
 }
