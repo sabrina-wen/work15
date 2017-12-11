@@ -44,9 +44,13 @@ int main(int argc, char * argv[]) {
   }
 
   else if (argc == 2 && strcmp(argv[1], "-v") == 0) {
-    char story[1000];
+    // getting actual size of story file
+    struct stat storyfile;
+    stat("story.txt", &storyfile);
+    char * story = calloc(1, storyfile.st_size + 1);
+    //char story[] = calloc(1000, sizeof(char));
     int fd = open("story.txt", O_RDWR);
-    read(fd, &story, sizeof(char) * 1000);
+    read(fd, story, storyfile.st_size);
     printf("story contents:\n%s",story);
     close(fd);
   }
@@ -64,9 +68,11 @@ int main(int argc, char * argv[]) {
 
     //does removing the story just meaning erasing its contents?
     // need to wait until semaphore reaches 0
-    char story[1000];
+    struct stat storyfile;
+    stat("story.txt", &storyfile);
+    char * story;
     int fd = open("story.txt", O_RDWR);
-    read(fd, &story, sizeof(char) * 1000);
+    read(fd, story, storyfile.st_size);
     printf("story contents:\n%s\n",story);
     printf("\n");
     printf("story file has been removed\n");
