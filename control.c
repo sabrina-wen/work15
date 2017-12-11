@@ -70,7 +70,7 @@ int main(int argc, char * argv[]) {
     // need to wait until semaphore reaches 0
     struct stat storyfile;
     stat("story.txt", &storyfile);
-    char * story;
+    char * story = calloc(1, storyfile.st_size + 1);
     int fd = open("story.txt", O_RDWR);
     read(fd, story, storyfile.st_size);
     printf("story contents:\n%s\n",story);
