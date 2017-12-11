@@ -3,36 +3,10 @@
 union semun initVal;
 struct sembuf ctlVal;
 
-
-//function to control sem value; how many can still access
-//===========================================================
-
-//SEMVAL = 0 (occupied) ; SEMVAL = 1 (unoccupied)
-int gate( int action ) {
-  int sem_id = semget(SEMKEY, 0, 0);
-  ctlVal.sem_num = 0;
-  if (action) {
-    ctlVal.sem_op = 1; //leave
-  } else {
-    ctlVal.sem_op = -1; //enter
-  }
-  int check = semop(sem_id, &ctlVal, 1);
-  return check;
-}
-
 //functions to view and control shm value
 //===========================================================
 
 //get shm val
-int getshm() {
-  int mem_id = shmget(MEMKEY, 0, 0);
-  //attach it to a pointer; obtain info
-  int * shm_val = (int *) shmat(mem_id, 0, SHM_RDONLY);
-  int size = *shm_val;
-  //detach it 
-  shmdt(shm_val);
-  return size;
-}
 
 //set new shm val
 void setshm( int size ) {
