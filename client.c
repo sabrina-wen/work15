@@ -62,7 +62,7 @@ int main(){
   //USER GETS TO READ:
   printf("Last lines: \n");
   len = getshm();
-  printf("%d\n", len);
+  //printf("%d\n", len);
   story = (char*) calloc(1,len+1);
 
 
@@ -78,7 +78,7 @@ int main(){
   //USER GETS TO WRITE
   printf("Would you like to add?:\n");
   fgets(newline,sizeof(newline),stdin);//gets user input
-  printf("%lu\n", sizeof(newline));
+  //printf("%lu\n", sizeof(newline));
   lseek(fd, 0, SEEK_END);
   write(fd, newline, strlen(newline));
   setshm(strlen(newline));
