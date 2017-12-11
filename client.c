@@ -31,7 +31,7 @@ int getshm() {
   //attach it to a pointer; obtain info
   int * shm_val = (int *) shmat(mem_id, 0, SHM_RDONLY);
   int size = *shm_val;
-  //detach it 
+  //detach it
   shmdt(shm_val);
   return size;
 }
@@ -42,13 +42,13 @@ void setshm( int size ) {
   //attach it to a pointer
   int * shm_val = (int *) shmat(mem_id, 0, 0);
   *shm_val = size;
-  //detach it 
+  //detach it
   shmdt(shm_val);
 }
 
 
 //===========================================================
-  
+
 int main(){
 
   gate(ENTER);
@@ -74,11 +74,11 @@ int main(){
   } else {
     printf("No last lines.\n");
   }
-   
+
   //USER GETS TO WRITE
   printf("Would you like to add?:\n");
   fgets(newline,sizeof(newline),stdin);//gets user input
-  printf("%d\n", sizeof(newline));
+  printf("%lu\n", sizeof(newline));
   lseek(fd, 0, SEEK_END);
   write(fd, newline, strlen(newline));
   setshm(strlen(newline));

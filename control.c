@@ -14,7 +14,7 @@ void setshm( int size ) {
   //attach it to a pointer
   int * shm_val = (int *) shmat(mem_id, 0, 0);
   *shm_val = size;
-  //detach it 
+  //detach it
   shmdt(shm_val);
 }
 
@@ -68,7 +68,10 @@ int main(int argc, char * argv[]) {
     int fd = open("story.txt", O_RDWR);
     read(fd, &story, sizeof(char) * 1000);
     printf("story contents:\n%s\n",story);
-    printf ("\n");
+    printf("\n");
+    printf("story file has been removed\n");
+    char * remove_contents[] = {"rm", "story.txt", NULL};
+    execvp(remove_contents[0], remove_contents);
   }
 
   else {
@@ -76,4 +79,3 @@ int main(int argc, char * argv[]) {
   }
   return 0;
 }
-
